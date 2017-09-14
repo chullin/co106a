@@ -16,4 +16,5 @@ CHIP Not {
     // Put your code here:
     Nand(a=in, b=in, out=out);
     //煩死了，又測試
+    //猜我是誰
 }
