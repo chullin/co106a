@@ -15,4 +15,8 @@ CHIP DMux {
 
     PARTS:
     // Put your code here:
+    Not(in=sel, out=not1);
+    And(a=in, b=not1, out=a);
+    And(a=in, b=sel, out=b);
 }
+//命名不能用底線
