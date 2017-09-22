@@ -14,7 +14,10 @@
 CHIP Mux4Way16 {
     IN a[16], b[16], c[16], d[16], sel[2];
     OUT out[16];
-
+    // 16個a、16個b、16個c、16個d
     PARTS:
     // Put your code here:
+    Mux16(a=a, b=b, sel=sel[0], out=muxab);
+    Mux16(a=c, b=d, sel=sel[0], out=muxcd);
+    Mux16(a=muxab, b=muxcd, sel=sel[1], out=out);
 }
