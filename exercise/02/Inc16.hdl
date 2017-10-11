@@ -31,3 +31,4 @@ CHIP Inc16 {
    FullAdder(a=in[14], b=false, c=carry13, carry=carry14, sum=out[14]);
    FullAdder(a=in[15], b=false, c=carry14, carry=carry15, sum=out[15]);
 }
+// Add(a=in, b[0]=ture, out=out);
