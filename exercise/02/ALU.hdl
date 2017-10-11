@@ -45,28 +45,30 @@ CHIP ALU {
    // Put you code here:
 
     // zx、nx
-    Mul16(a=x, b=false, sel=zx, out=x1);     // if (zx == 1) set x = 0 
-    Not(in=x1, out=Notx1);                   // if (nx == 1) set x = !x  
-    Mul16(a=x1, b=Notx1, sel=nx, out=xNotx); // chose x or notx
+    Mux16(a=x, b=false, sel=zx, out=x1);     // if (zx == 1) set x = 0 
+    Not16(in=x1, out=nx1);                     // if (nx == 1) set x = !x  
+    Mux16(a=x1, b=nx1, sel=nx, out=x2);      // chose x or notx
     
     // zy、ny
     Mux16(a=y, b=false, sel=zy, out=y1);     // if (zy == 1) set y = 0 
-    Not(in=y1, b=Noty1);                     // if (ny == 1) set y = !y  
-    Mux16(a=y1, b=Noty1, sel=ny, out=yNoty); // chose y or noty 
+    Not16(in=y1, out=ny1);                   // if (ny == 1) set y = !y  
+    Mux16(a=y1, b=ny1, sel=ny, out=y2);      // chose y or noty 
 
     // f
-    Add16(a=xNotx, b=yNoty, out=xplusy);      // if (f == 1)  set out = x + y
-    Add16(a=xNotx, b=yNoty, out=xaddy);       // if (f == 0)  set out = x & y
-    Mul16(a=xaddy, b=xplusy, sel=f, out=fxy); // chose which functions
+    Add16(a=x2, b=y2, out=addxy);            // if (f == 1)  set out = x + y
+    And16(a=x2, b=y2, out=andxy);             // if (f == 0)  set out = x & y
+    Mux16(a=andxy, b=addxy, sel=f, out=rout); // chose which functions
 
     // no
-    Not16(in=fxy, out=nfxy);
-    Mux16(a=fxy, b=nfxy, sel=no,out[0..7]=fout1, out[8..15]=fout2, out=noout);  // if (no == 1) set out = !out 
+    Not16(in=rout, out=nrout);
+    Mux16(a=rout, b=nrout, sel=no, out[0..7]=fout1, out[8..15]=fout2, out=tout);  // if (no == 1) set out = !out 
 
     //zr
-    Or8way(in=fout1, out=zrout1);
-    Or8way(in=fout2, out=zrout2);
-    Or(a=zrout1, b=zrout2, out=zrout);
-    Not(in=zrout, out=zr);              // if (out == 0) set zr = 1
+    Or8Way(in=fout1, out=sout1);
+    Or8Way(in=fout2, out=sout2);
+    Or(a=sout1, b=sout2, out=sout);
+    Not(in=sout, out=zr);              // if (out == 0) set zr = 1
 
+    //ng
+    And16(a=tout, b=true, out=out, out[15]=ng);
 }
