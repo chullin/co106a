@@ -16,4 +16,26 @@ CHIP RAM8 {
 
     PARTS:
     // Put your code here:
+
+    /**
+    *  哪個寄存器實際上被寫入（如果有的話）由...給出
+    *  使用一個dmux8發送加載到適當的寄存器
+    */
+    DMux8Way(in=load, sel=address, a=a, b=b, c=c, d=d, e=e, f=f, g=g, h=h);
+                   /* sel 為 Address[3] */
+    Register(in=in, load=a, out=oa);
+    Register(in=in, load=b, out=ob);
+    Register(in=in, load=c, out=oc);
+    Register(in=in, load=d, out=od);
+    Register(in=in, load=e, out=oe);
+    Register(in=in, load=f, out=of);
+    Register(in=in, load=g, out=og);
+    Register(in=in, load=h, out=oh);
+
+    /**
+    *  最終輸出將由...給出
+    *  使用Mux8Way16選擇要輸出的寄存器
+    */
+    Mux8Way16(a=oa, b=ob, c=oc, d=od, e=oe, f=of, g=og, h=oh, sel=address, out=out);
+                                                           /* sel 為 Address[3] */
 }

@@ -17,4 +17,12 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+    /*計數器*/
+    Inc16(in=feedback,out=incout);
+
+	Mux16(a=feedback, b=incout, sel=inc,out=Mux1);
+	Mux16(a=Mux1, b=in, sel=load, out=Mux2);
+	Mux16(a=Mux2, b=false, sel=reset, out=Mux3);
+	
+	Register(in=Mux3, load=true, out=out, out=feedback);
 }
